@@ -142,17 +142,28 @@ def fillConcreteFormular(formdoc, dataDict, idx):
                "EVNAME01", "ENNAME01", "EGNAME01", "E01BEKENNTNIS",
                "EVNAME02", "ENNAME02", "EGNAME02", "E02BEKENNTNIS",
                "PVNAME01", "PNNAME01",
+               "PVNAME02", "PNNAME02",
+               "PVNAME03", "PNNAME03",
                "ZVNAME01", "ZNNAME01",
-               "KDATUM", "BSPRUCH", "BSTELLE", "PFARRER", "ADATUM"]
+               "KDATUM", "BSPRUCH", "BSTELLE", "PFARRER", "ADATUM",
+               ]
     taufling = dataDict.get("täufling")
     eltern = dataDict.get("eltern")
     paten = dataDict.get("taufpate")
     zeuge = dataDict.get("taufzeuge")
 
+    pate2fn = paten[1].firstname if len(paten) > 1 else ""
+    pate2ln = paten[1].lastname if len(paten) > 1 else ""
+    pate3fn = paten[2].firstname if len(paten) > 2 else ""
+    pate3ln = paten[2].lastname if len(paten) > 2 else ""
+
+
     lreplace = [taufling.firstname, taufling.lastname, taufling.dateOfBirth, taufling.placeOfBirth,
                 eltern[0].firstname, eltern[0].lastname, eltern[0].originName, eltern[0].confession,
                 eltern[1].firstname, eltern[1].lastname, eltern[1].originName, eltern[1].confession,
                 paten[idx].firstname, paten[idx].lastname,
+                pate2fn, pate2ln,
+                pate3fn, pate3ln,
                 zeuge[idx].firstname, zeuge[idx].lastname,
                 dataDict.get("kdatum"), dataDict.get("spruch"), dataDict.get("stelle"), dataDict.get("pfarrer"), dataDict.get("adatum")
                 ]
