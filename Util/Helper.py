@@ -109,45 +109,51 @@ def fillFormulare(file, dataDict):
     formdoc = Document("."+"\\Formulare\\" + file)
     täufling = dataDict.get("täufling")
     if "StammbuchTaufe" in file:
-        fillConcreteFormular(formdoc, dataDict)
+        fillConcreteFormular(formdoc, dataDict, 0)
         formdoc.save('Stammbuch_Taufe ' + täufling.lastname + '.docx')
     elif "StammbuchTrauung" in file:
         ename = dataDict.get("eltern")
-        fillConcreteFormular(formdoc, dataDict)
+        fillConcreteFormular(formdoc, dataDict, 0)
         formdoc.save('Stammbuch_Trauung ' + ename[0].lastname + '.docx')
     if "Patenurkunde" in file:
         pate = dataDict.get("taufpate")
-        for concretePate in pate:
+
+        for idx in range(len(pate)):
             formdoc = Document("."+"\\Formulare\\" + file)
-            fillConcreteFormular(formdoc, dataDict)
-            formdoc.save('Patenurkunde ' + täufling.lastname + "_" + concretePate.lastname + '.docx')
+            fillConcreteFormular(formdoc, dataDict, idx)
+            formdoc.save('Patenurkunde ' + täufling.lastname + "_" + pate[idx].lastname + '.docx')
+
     if "Taufzeuge" in file:
         zeuge = dataDict.get("taufzeuge")
+        zeugeIdx = 0
         for concreteZeuge in zeuge:
             formdoc = Document("."+"\\Formulare\\"+ file)
-            fillConcreteFormular(formdoc, dataDict)
+            fillConcreteFormular(formdoc, dataDict, zeugeIdx)
             formdoc.save('Taufzeuge ' + täufling.lastname + "_" + concreteZeuge.lastname + '.docx')
+            zeugeIdx += 1
     if "Taufurkunde" in file:
-        fillConcreteFormular(formdoc, dataDict)
+        fillConcreteFormular(formdoc, dataDict, 0)
         formdoc.save('Taufurkunde ' + täufling.lastname + '_' + täufling.firstname +'.docx')
 
 
-def fillConcreteFormular(formdoc, dataDict):
+def fillConcreteFormular(formdoc, dataDict, idx):
     # TODO ersetzen durch Template Names
-    lplaceh = ["TVNAME", "TNNAME", "GDATUM", "GORT", "EVNAME01", "ENNAME02", "EGNAME01", "E01BEKENNTNIS", "EVNAME02", "ENNAME02", "EGNAME02", "E02BEKENNTNIS", "PVNAME01", "PNNAME01", "PVNAME02", "PNNAME02",  "PVNAME03", "PNNAME03",  "KDATUM", "BSPRUCH", "BSTELLE", "PFARRER", "ADATUM"]
+    lplaceh = ["TVNAME", "TNNAME", "GDATUM", "GORT",
+               "EVNAME01", "ENNAME01", "EGNAME01", "E01BEKENNTNIS",
+               "EVNAME02", "ENNAME02", "EGNAME02", "E02BEKENNTNIS",
+               "PVNAME01", "PNNAME01",
+               "ZVNAME01", "ZNNAME01",
+               "KDATUM", "BSPRUCH", "BSTELLE", "PFARRER", "ADATUM"]
     taufling = dataDict.get("täufling")
     eltern = dataDict.get("eltern")
     paten = dataDict.get("taufpate")
     zeuge = dataDict.get("taufzeuge")
-    patenOrZeuge = paten + zeuge
 
     lreplace = [taufling.firstname, taufling.lastname, taufling.dateOfBirth, taufling.placeOfBirth,
                 eltern[0].firstname, eltern[0].lastname, eltern[0].originName, eltern[0].confession,
                 eltern[1].firstname, eltern[1].lastname, eltern[1].originName, eltern[1].confession,
-                patenOrZeuge[0].firstname, patenOrZeuge[0].lastname,
-                patenOrZeuge[1].firstname, patenOrZeuge[1].lastname,
-                patenOrZeuge[2].firstname, patenOrZeuge[2].lastname,
-                patenOrZeuge[3].firstname, patenOrZeuge[3].lastname,
+                paten[idx].firstname, paten[idx].lastname,
+                zeuge[idx].firstname, zeuge[idx].lastname,
                 dataDict.get("kdatum"), dataDict.get("spruch"), dataDict.get("stelle"), dataDict.get("pfarrer"), dataDict.get("adatum")
                 ]
     for paragraph in formdoc.paragraphs:
