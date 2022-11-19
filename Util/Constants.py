@@ -1,0 +1,6 @@
+vorname = "Vorname"
+nachname = "Nachname"
+pate = "Pate"
+täufling = "Täufling"
+dateOfBirth = "Geburtsdatum"
+placeOfBirth = "Geburtsort"
